@@ -36,6 +36,13 @@ print(df.shape,df.head())
 # plt.imshow(draw_rect(img, bboxes))
 # plt.show()
 
+
+
+def transform_img(df,transform_model):
+    return df
+
+
+
 def data_aug():
 
     ###要根据csvs生成jpg路径从而读取
@@ -72,26 +79,9 @@ def data_aug():
                 # img = Image.open(image_path)
                 # img_o=img
 
-                '''
-                RandomHorizontalFlip(0.1) #水平翻转#应该是沿着水平线左右翻转
-                RandomScale(0.3, diff = True)#缩放
-                RandomTranslate(0.2, diff = True)#平移
-                RandomRotate(25)#旋转
-                RandomShear(0.2) #随机剪切
-                ###Resize(1000) #不使用，设置成总维度为1000
-                RandomHSV(100, 100, 100)
-                
-                
-                ####先使用单个的每个生成图片然后在使用组合的生成图片
-                ###每个都运行两次
-                单个时RandomHorizontalFlip(0.8)设置成1，组合时设置成0.1
-                
-                
-                '''
-
-                transforms = Sequence([RandomHorizontalFlip(0.2), RandomScale(0.1, diff = True), RandomRotate(10)])
 
 
+                transforms = Sequence([RandomHorizontalFlip(1), RandomScale(0.2, diff = True), RandomRotate(10)])
                 img, bboxes = transforms(img, bboxes)
                 print('filename2={},class2={}'.format(file_name,folder_name))
 
@@ -124,11 +114,11 @@ def data_aug():
 
 
 
-                if not os.path.exists('raw_augment/{}'.format(folder_name)):
-                    os.makedirs('raw_augment/{}'.format(folder_name))
-                    mp.imsave('raw_augment/{}/{}'.format(folder_name, file_name), img)
-                else:
-                    mp.imsave('raw_augment/{}/{}'.format(folder_name,file_name), img)
+                # if not os.path.exists('raw_augment/{}'.format(folder_name)):
+                #     os.makedirs('raw_augment/{}'.format(folder_name))
+                #     mp.imsave('raw_augment/{}/{}'.format(folder_name, file_name), img)
+                # else:
+                #     mp.imsave('raw_augment/{}/{}'.format(folder_name,file_name), img)
             except Exception as e:
                 print('my err',e)
 
