@@ -7,6 +7,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from PIL import Image
 import matplotlib.image as mp
+'''
+将每一个文件下图片的所有变换仍然存在该图片的文件夹下，因此每一次变换的文件名称要不同：该文件夹下，变换名称+次数
+
+'''
+
 
 path_axis=r'F:\陶士来文件\tsl_python_project\object_detection\data_examples\train_labels_new.csv'
 df=pd.read_csv(path_axis)
@@ -52,6 +57,7 @@ def data_aug():
             try :
                 # print(os.path.join(path, file_name) )
                 folder_name=path.split('\\')[-1]
+                ##根据文件夹名称和文件名称确认每一幅图片所在的路径
 
                 dd = df[(df['folder'] == folder_name) & (df['filename'] == file_name)]
                 ##jpg图片在csv中没有时，dd应该为空
@@ -79,17 +85,18 @@ def data_aug():
                 RandomRotate(25)#旋转
                 RandomShear(0.2) #随机剪切
                 ###Resize(1000) #不使用，设置成总维度为1000
-                RandomHSV(100, 100, 100)
+                RandomHSV(100, 100, 100)##组合时一组不加randomhsv,一组加randomhsv;每组都运行5次
                 
                 
                 ####先使用单个的每个生成图片然后在使用组合的生成图片
-                ###每个都运行两次
-                单个时RandomHorizontalFlip(0.8)设置成1，组合时设置成0.1
-                
-                
+                ###每个都运行5次##单个的每个运行5次，sequence的运行30次
+                单个时RandomHorizontalFlip(0.8)单个时设置0.8，组合时设置成0.1               
                 '''
+                # transforms = Sequence([RandomHorizontalFlip(0.1), RandomScale(0.3, diff = True), RandomRotate(25),
+                #                        RandomTranslate(0.2, diff = True),RandomShear(0.2),RandomHSV(100, 100, 100)])
 
-                transforms = Sequence([RandomHorizontalFlip(0.2), RandomScale(0.1, diff = True), RandomRotate(10)])
+                transforms = Sequence([RandomHorizontalFlip(0.1), RandomScale(0.3, diff=True), RandomRotate(25),
+                                       RandomTranslate(0.2, diff=True), RandomShear(0.2)])
 
 
                 img, bboxes = transforms(img, bboxes)
